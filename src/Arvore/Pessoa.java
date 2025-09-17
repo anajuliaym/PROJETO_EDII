@@ -18,8 +18,6 @@ public class Pessoa {
         this.direita = null;
         this.pai = null;
     }
-
-
     public void setNome(String nome) {this.nome = nome;}
     public void setEsquerda(Pessoa esquerda) {this.esquerda = esquerda;}
     public void setDireita  (Pessoa direita) {this.direita = direita;}
@@ -31,6 +29,4 @@ public class Pessoa {
     public Pessoa getDireita  () {return this.direita;}
     public Pessoa getPai () {return this.pai;}
     public int getNivel () {return this.nivel;}
-
-
 }
