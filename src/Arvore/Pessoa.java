@@ -4,6 +4,7 @@ public class Pessoa {
     private String nome;
     private Pessoa esquerda, direita, pai;
     private int nivel;
+    private int arvore;
 
     public Pessoa (String nome, Pessoa esquerda, Pessoa direita, Pessoa pai) {
         this.nome = nome;
@@ -29,4 +30,5 @@ public class Pessoa {
     public Pessoa getDireita  () {return this.direita;}
     public Pessoa getPai () {return this.pai;}
     public int getNivel () {return this.nivel;}
+    public int getArvore(){return this.arvore;}
 }
