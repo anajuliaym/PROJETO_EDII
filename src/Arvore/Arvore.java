@@ -77,33 +77,36 @@ public class Arvore {
 
     }
 
-    public Pessoa calculaAncestral(Pessoa p, Pessoa q){
-        if(p.getArvore() != q.getArvore()){
-            return raiz;
+    public Pessoa calculaAncestral(Pessoa p, Pessoa q) {
+        if (p == null || q == null) {
+            return null;
         }
-        else if(p.getNivel()-q.getNivel() == 0){
-            return p.getPai(); //irmãos
-        }
-        else if (p.getNivel() < q.getNivel()) {
-            int subtracao = p.getNivel() - q.getNivel();
 
-            int counter = abs(subtracao);
-            while(counter != 0) {
-                p = p.getPai();
-                counter--;
+        // 1. Ajusta os níveis: sobe quem estiver mais embaixo
+        while (p.getNivel() > q.getNivel()) {
+            p = p.getPai();
+        }
+        while (q.getNivel() > p.getNivel()) {
+            q = q.getPai();
+        }
+
+        // 2. Sobe junto até encontrar o ancestral comum
+        while (p != q) {
+            p = p.getPai();
+            q = q.getPai();
+
+            // Caso não exista ancestral em comum
+            if (p == null || q == null) {
+                return null;
             }
-            if (p.getPai() == q.getPai()) {
-                if (p == q) {
-                    return q;
-                } else {
-                    return q.getPai();
-                }
-            }
-
         }
 
-
+        return p; // ou q, tanto faz, já são iguais
     }
+        
+
+
+    
 
 
 

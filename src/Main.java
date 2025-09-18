@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        List<String> nomes = File.leituraDosNomes("src/nomes");
+        List<String> nomes = File.leituraDosNomes("src/nomes.txt");
         Arvore arvoreGenealogica = new Arvore();
         List<Pessoa> nomesNaoInseridos = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
@@ -28,7 +28,7 @@ public class Main {
                 nomesNaoInseridos.add(pai);
                 // System.out.println("Lista dos nomes não inseridos: " + nomesNaoInseridos);
             }
-            i++;
+            
         }
         while (!nomesNaoInseridos.isEmpty()) {
             for (int j = 0; j < nomesNaoInseridos.size(); j++) {
@@ -59,17 +59,22 @@ public class Main {
                 System.out.print("\nDigite o primeiro nome (nome.sobrenome): ");
                 String nome1 = scanner.nextLine();
                 Pessoa resultado1 = arvoreGenealogica.buscar(arvoreGenealogica.getRaiz(), nome1);
+                System.out.println(resultado1);
+
 
                 System.out.print("\nDigite o segundo nome (nome.sobrenome): ");
                 String nome2 = scanner.nextLine();
                 Pessoa resultado2 = arvoreGenealogica.buscar(arvoreGenealogica.getRaiz(), nome2);
+                System.out.println(resultado2);
+                System.out.println(calculaAncestral(resultado1, resultado2));
 
-                if (resultado1 == null || resultado2 == null) {
-                    System.out.println("Sem relação");
-                }
-                else {
+
+                // if (resultado1 == null || resultado2 == null) {1
+                //     System.out.println("Sem relação");
+                // }
+                // else {
                     
-                }
+                // }
 
 
                 // Espaço para fazer a funcao de buscar parentesco
@@ -83,5 +88,10 @@ public class Main {
         }
 
         scanner.close();
+    }
+
+    private static char[] calculaAncestral(Pessoa resultado1, Pessoa resultado2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'calculaAncestral'");
     }
 }
