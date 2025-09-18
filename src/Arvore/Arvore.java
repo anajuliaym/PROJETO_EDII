@@ -6,7 +6,7 @@ public class Arvore {
     private Pessoa raiz;
 
 
-    public boolean inserir(Pessoa noPai, Pessoa noFilho) {
+    public boolean inserir(Pessoa noFilho, Pessoa noPai) {
         if (raiz == null) {
             raiz = noPai;
             noPai.setEsquerda(noFilho);
@@ -36,5 +36,17 @@ public class Arvore {
     }
 
     public Pessoa getRaiz() {return raiz;}
+
     
+
+    public void imprimirArvore(Pessoa pessoa, String espaco) {
+        if (pessoa == null) return;
+
+        imprimirArvore(pessoa.getEsquerda(), espaco + "    ");
+
+        System.out.println(espaco + pessoa.getNome());
+
+        imprimirArvore(pessoa.getDireita(), espaco + "    ");
+    }
+
 }
