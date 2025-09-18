@@ -51,23 +51,26 @@ public class Main {
 
             if (escolha == 1) {
                 arvoreGenealogica.imprimirArvore(arvoreGenealogica.getRaiz(), "");
+
+                arvoreGenealogica.calculaNivel(arvoreGenealogica.getRaiz(), 0, 0);
             }
 
             else if (escolha == 2) {
                 System.out.print("\nDigite o primeiro nome (nome.sobrenome): ");
                 String nome1 = scanner.nextLine();
                 Pessoa resultado1 = arvoreGenealogica.buscar(arvoreGenealogica.getRaiz(), nome1);
-                if (resultado1 == null) {
-                    System.out.println("ERRO: " + nome1 + " não existe na árvore!");
-                    continue;
-                }
+
                 System.out.print("\nDigite o segundo nome (nome.sobrenome): ");
                 String nome2 = scanner.nextLine();
                 Pessoa resultado2 = arvoreGenealogica.buscar(arvoreGenealogica.getRaiz(), nome2);
-                if (resultado2 == null) {
-                    System.out.println("ERRO: " + nome2 + " não existe na árvore!");
-                    continue;
+
+                if (resultado1 == null || resultado2 == null) {
+                    System.out.println("Sem relação");
                 }
+                else {
+                    
+                }
+
 
                 // Espaço para fazer a funcao de buscar parentesco
             }
