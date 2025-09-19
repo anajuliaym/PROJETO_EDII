@@ -9,7 +9,7 @@ import java.util.List;
 public class File {
 
     public static void main (String[] args){
-        System.out.println(leituraDosNomes("src/nomes"));
+        System.out.println(leituraDosNomes("src/nomes.txt"));
     }
 
     public static List<String> leituraDosNomes(String caminho) {

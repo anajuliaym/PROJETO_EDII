@@ -8,21 +8,26 @@ public class Arvore {
     private Pessoa raiz;
 
 
-    public boolean inserir(Pessoa noFilho, Pessoa noPai) {
+
+
+// Mude o retorno de "boolean" para "Pessoa"
+    public Pessoa inserir(Pessoa noFilho, Pessoa noPai) {
         if (raiz == null) {
             raiz = noPai;
-            noPai.setEsquerda(noFilho);
-            return true;
-        }
-        else {
-            Pessoa verifica = buscar(raiz, noPai.getNome());
-            if (verifica != null) {
-                if (verifica.getEsquerda() == null) {
-                    verifica.setEsquerda(noFilho);
-                } else {verifica.setDireita(noFilho);}
-                return true;
+            raiz.setEsquerda(noFilho);
+            return raiz; // Retorna o pai que agora é a raiz
+        } else {
+            Pessoa paiReal = buscar(raiz, noPai.getNome());
+            if (paiReal != null) {
+                // Lógica para adicionar como filho esquerdo ou direito
+                if (paiReal.getEsquerda() == null) {
+                    paiReal.setEsquerda(noFilho);
+                } else {
+                    paiReal.setDireita(noFilho);
+                }
+                return paiReal; // <<-- A CORREÇÃO PRINCIPAL: Retorna o pai real que foi encontrado
             }
-            return false;
+            return null; // Retorna null se não encontrou o pai na árvore
         }
     }
 
@@ -49,10 +54,10 @@ public class Arvore {
         if (pessoa == raiz) {
             calculaNivel(pessoa.getDireita(), nivel + 1, 2);
             calculaNivel(pessoa.getEsquerda(), nivel + 1, 1);
-            System.out.println("\nNivel: " + nivel + " da pessoa " + pessoa.getNome() + " | Sentido da arvore: " + sentidoArvore);
+            // System.out.println("\nNivel: " + nivel + " da pessoa " + pessoa.getNome() + " | Sentido da arvore: " + sentidoArvore);
         }
         else {
-            System.out.println("\nNivel: " + nivel + " da pessoa " + pessoa.getNome() + " | Sentido da arvore: " + sentidoArvore);
+            // System.out.println("\nNivel: " + nivel + " da pessoa " + pessoa.getNome() + " | Sentido da arvore: " + sentidoArvore);
 
             calculaNivel(pessoa.getDireita(), nivel + 1, sentidoArvore);
             calculaNivel(pessoa.getEsquerda(), nivel + 1, sentidoArvore);
@@ -60,50 +65,85 @@ public class Arvore {
     }
 
 
-    public boolean verificaPai(Pessoa p1, Pessoa p2){
-        return p1 == p2.getPai();
+
+
+    public void verificaParentesco(Pessoa p, Pessoa q){
+        if(p == null || q == null){
+            System.out.println("Sem relacao");
+        }
+        else if(p==q.getPai()){
+            System.out.println("Pai");
+        }
+        else if(q == p.getPai()){
+            System.out.println("Filho");
+
+        }
+        else if(q.getPai() == p.getPai()){
+            System.out.println("Irmao");
+        }
+        else if(calculaAncestral(p, q) == p || calculaAncestral(p, q) == q){
+            if(p.getNivel() - q.getNivel() == 2){
+                System.out.println("Neto");
+            }
+            else if(p.getNivel() - q.getNivel() == -2){
+                System.out.println("Avo");
+            
+            }
+            else if(p.getNivel()-q.getNivel()== 3){
+                System.out.println("bisneto");
+            }
+            else if(p.getNivel()-q.getNivel()== -3){
+                System.out.println("bisavo");
+            }
+            else if(p.getNivel() > q.getNivel()){
+                int nivel = p.getNivel() - q.getNivel();
+                for(int i = 0; i< nivel - 2; i++){
+                    System.out.print("ta"); 
+                }
+                System.out.print("raneto");
+
+            }
+            else if(p.getNivel() < q.getNivel()){
+                int nivel = Math.abs(p.getNivel() - q.getNivel());
+                for(int i = 0; i< nivel - 2; i++){
+                    System.out.print("ta"); 
+                }
+                System.out.print("ravo");
+
+            }
+            else{
+                int r = calculaAncestral(p, q).getNivel();
+                int m = p.getNivel()-1 - r ;
+                int n = q.getNivel()-1 -r;
+
+                System.out.println("Primo-"+ Math.min(m,n)+ " em grau " + Math.abs(m -n) );
+
+            }
+         }
+
     }
 
-    public boolean verificaFilho(Pessoa p1, Pessoa p2){
-        return p2 == p1.getPai();
-    }
-
-
-    public void verificaPrimos(Pessoa p, Pessoa q){
-        int m;
-        int n;
-
-
-
-    }
 
     public Pessoa calculaAncestral(Pessoa p, Pessoa q) {
         if (p == null || q == null) {
             return null;
         }
 
-        // 1. Ajusta os níveis: sobe quem estiver mais embaixo
-        while (p.getNivel() > q.getNivel()) {
+        // Nivelamento seguro
+        while (p != null && p.getNivel() > q.getNivel()) {
             p = p.getPai();
         }
-        while (q.getNivel() > p.getNivel()) {
+        while (q != null && q.getNivel() > p.getNivel()) {
             q = q.getPai();
         }
 
-        // 2. Sobe junto até encontrar o ancestral comum
-        while (p != q) {
+        // Subida conjunta segura
+        while (p != null && p != q) {
             p = p.getPai();
             q = q.getPai();
-
-            // Caso não exista ancestral em comum
-            if (p == null || q == null) {
-                return null;
-            }
         }
-
-        return p; // ou q, tanto faz, já são iguais
+        return p;
     }
-        
 
 
     

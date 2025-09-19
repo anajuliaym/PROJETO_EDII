@@ -13,31 +13,58 @@ public class Main {
         List<Pessoa> nomesNaoInseridos = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
 
-        for (int i = 0; i < (nomes.size() - 1); i++) {
-            Pessoa pai = new Pessoa();
+
+        for (int i = 0; i < nomes.size(); i += 2) {
+            // Este objeto 'pai' é temporário, apenas para carregar o nome
+            Pessoa paiTemporario = new Pessoa();
             Pessoa filho = new Pessoa();
 
-            filho.setNome(nomes.get(i));
-            pai.setNome(nomes.get(i + 1));
-            filho.setPai(pai);
+            if (i + 1 < nomes.size()) {
+                filho.setNome(nomes.get(i));
+                paiTemporario.setNome(nomes.get(i + 1));
 
-            // System.out.println("\nFilho: "+ nomes.get(i));
-            // System.out.println("\nPai: "+ nomes.get(i+1));
-            if (!arvoreGenealogica.inserir(filho, pai)) {
-                nomesNaoInseridos.add(filho);
-                nomesNaoInseridos.add(pai);
-                // System.out.println("Lista dos nomes não inseridos: " + nomesNaoInseridos);
-            }
-            
-        }
-        while (!nomesNaoInseridos.isEmpty()) {
-            for (int j = 0; j < nomesNaoInseridos.size(); j++) {
-                if (arvoreGenealogica.inserir(nomesNaoInseridos.get(j), nomesNaoInseridos.get(j + 1))) {
-                    nomesNaoInseridos.remove(j);
-                    nomesNaoInseridos.remove(j);
-                    j--;
+                // Inserimos e capturamos o "Pai Real" que o método retorna
+                Pessoa paiRealDaArvore = arvoreGenealogica.inserir(filho, paiTemporario);
+
+                if (paiRealDaArvore != null) {
+                    // AQUI ESTÁ A CORREÇÃO DEFINITIVA
+                    // O filho agora aponta para o objeto pai que realmente existe na árvore
+                    filho.setPai(paiRealDaArvore);
+                } else {
+                    // A inserção falhou, guarde para tentar depois
+                    nomesNaoInseridos.add(filho);
+                    nomesNaoInseridos.add(paiTemporario);
                 }
             }
+        }
+
+
+
+        int tentativas = nomesNaoInseridos.size(); // Para evitar um loop infinito
+        while (!nomesNaoInseridos.isEmpty() && tentativas > 0) {
+            
+            // Itera de 2 em 2 (filho, pai)
+            for (int j = 0; j < nomesNaoInseridos.size(); j += 2) {
+                Pessoa filho = nomesNaoInseridos.get(j);
+                Pessoa paiTemporario = nomesNaoInseridos.get(j + 1);
+
+                // 1. Chamamos 'inserir' e guardamos o objeto Pessoa retornado
+                Pessoa paiRealDaArvore = arvoreGenealogica.inserir(filho, paiTemporario);
+
+                // 2. A condição do 'if' agora checa se o retorno é diferente de nulo
+                if (paiRealDaArvore != null) {
+                    // 3. Se a inserção deu certo, corrigimos o link do pai
+                    filho.setPai(paiRealDaArvore);
+
+                    // E removemos o par da lista de "não inseridos"
+                    // Remove o pai primeiro (índice maior) para não afetar o índice do filho
+                    nomesNaoInseridos.remove(j + 1);
+                    nomesNaoInseridos.remove(j);
+                    j -= 2; // Ajusta o índice do loop, já que removemos 2 itens
+                    break; // Sai do for para reiniciar a varredura da lista modificada
+                }
+            }
+            tentativas--;
         }
 
         while (true) {
@@ -53,31 +80,24 @@ public class Main {
                 arvoreGenealogica.imprimirArvore(arvoreGenealogica.getRaiz(), "");
 
                 arvoreGenealogica.calculaNivel(arvoreGenealogica.getRaiz(), 0, 0);
+
+                
             }
 
             else if (escolha == 2) {
+                
+                arvoreGenealogica.calculaNivel(arvoreGenealogica.getRaiz(), 0, 0);
                 System.out.print("\nDigite o primeiro nome (nome.sobrenome): ");
                 String nome1 = scanner.nextLine();
                 Pessoa resultado1 = arvoreGenealogica.buscar(arvoreGenealogica.getRaiz(), nome1);
-                System.out.println(resultado1);
 
 
                 System.out.print("\nDigite o segundo nome (nome.sobrenome): ");
                 String nome2 = scanner.nextLine();
                 Pessoa resultado2 = arvoreGenealogica.buscar(arvoreGenealogica.getRaiz(), nome2);
-                System.out.println(resultado2);
-                System.out.println(calculaAncestral(resultado1, resultado2));
+                arvoreGenealogica.verificaParentesco(resultado1, resultado2);
 
 
-                // if (resultado1 == null || resultado2 == null) {1
-                //     System.out.println("Sem relação");
-                // }
-                // else {
-                    
-                // }
-
-
-                // Espaço para fazer a funcao de buscar parentesco
             }
 
             else if (escolha == 3) {
@@ -90,8 +110,5 @@ public class Main {
         scanner.close();
     }
 
-    private static char[] calculaAncestral(Pessoa resultado1, Pessoa resultado2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'calculaAncestral'");
-    }
+
 }
