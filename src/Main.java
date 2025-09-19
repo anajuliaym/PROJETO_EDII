@@ -38,10 +38,8 @@ public class Main {
             }
         }
 
-
-
-        int tentativas = nomesNaoInseridos.size(); // Para evitar um loop infinito
-        while (!nomesNaoInseridos.isEmpty() && tentativas > 0) {
+ 
+        while (!nomesNaoInseridos.isEmpty()) {
             
             // Itera de 2 em 2 (filho, pai)
             for (int j = 0; j < nomesNaoInseridos.size(); j += 2) {
@@ -61,10 +59,8 @@ public class Main {
                     nomesNaoInseridos.remove(j + 1);
                     nomesNaoInseridos.remove(j);
                     j -= 2; // Ajusta o índice do loop, já que removemos 2 itens
-                    break; // Sai do for para reiniciar a varredura da lista modificada
                 }
             }
-            tentativas--;
         }
 
         while (true) {
