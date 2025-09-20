@@ -15,7 +15,6 @@ public class Main {
 
 
         for (int i = 0; i < nomes.size(); i += 2) {
-            // Este objeto 'pai' é temporário, apenas para carregar o nome
             Pessoa paiTemporario = new Pessoa();
             Pessoa filho = new Pessoa();
 
@@ -23,15 +22,12 @@ public class Main {
                 filho.setNome(nomes.get(i));
                 paiTemporario.setNome(nomes.get(i + 1));
 
-                // Inserimos e capturamos o "Pai Real" que o método retorna
                 Pessoa paiRealDaArvore = arvoreGenealogica.inserir(filho, paiTemporario);
 
                 if (paiRealDaArvore != null) {
-                    // AQUI ESTÁ A CORREÇÃO DEFINITIVA
-                    // O filho agora aponta para o objeto pai que realmente existe na árvore
+
                     filho.setPai(paiRealDaArvore);
                 } else {
-                    // A inserção falhou, guarde para tentar depois
                     nomesNaoInseridos.add(filho);
                     nomesNaoInseridos.add(paiTemporario);
                 }
@@ -41,24 +37,18 @@ public class Main {
  
         while (!nomesNaoInseridos.isEmpty()) {
             
-            // Itera de 2 em 2 (filho, pai)
             for (int j = 0; j < nomesNaoInseridos.size(); j += 2) {
                 Pessoa filho = nomesNaoInseridos.get(j);
                 Pessoa paiTemporario = nomesNaoInseridos.get(j + 1);
 
-                // 1. Chamamos 'inserir' e guardamos o objeto Pessoa retornado
                 Pessoa paiRealDaArvore = arvoreGenealogica.inserir(filho, paiTemporario);
 
-                // 2. A condição do 'if' agora checa se o retorno é diferente de nulo
                 if (paiRealDaArvore != null) {
-                    // 3. Se a inserção deu certo, corrigimos o link do pai
                     filho.setPai(paiRealDaArvore);
 
-                    // E removemos o par da lista de "não inseridos"
-                    // Remove o pai primeiro (índice maior) para não afetar o índice do filho
                     nomesNaoInseridos.remove(j + 1);
                     nomesNaoInseridos.remove(j);
-                    j -= 2; // Ajusta o índice do loop, já que removemos 2 itens
+                    j -= 2;
                 }
             }
         }

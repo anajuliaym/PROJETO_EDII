@@ -8,26 +8,22 @@ public class Arvore {
     private Pessoa raiz;
 
 
-
-
-// Mude o retorno de "boolean" para "Pessoa"
     public Pessoa inserir(Pessoa noFilho, Pessoa noPai) {
         if (raiz == null) {
             raiz = noPai;
             raiz.setEsquerda(noFilho);
-            return raiz; // Retorna o pai que agora é a raiz
+            return raiz; 
         } else {
             Pessoa paiReal = buscar(raiz, noPai.getNome());
             if (paiReal != null) {
-                // Lógica para adicionar como filho esquerdo ou direito
                 if (paiReal.getEsquerda() == null) {
                     paiReal.setEsquerda(noFilho);
                 } else {
                     paiReal.setDireita(noFilho);
                 }
-                return paiReal; // <<-- A CORREÇÃO PRINCIPAL: Retorna o pai real que foi encontrado
+                return paiReal; 
             }
-            return null; // Retorna null se não encontrou o pai na árvore
+            return null;
         }
     }
 
