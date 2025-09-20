@@ -105,17 +105,18 @@ public class Arvore {
                     System.out.print("ta"); 
                 }
                 System.out.print("ravo");
-
             }
-            else{
+        }
+        else{
                 int r = calculaAncestral(p, q).getNivel();
                 int m = p.getNivel()-1 - r ;
                 int n = q.getNivel()-1 -r;
 
                 System.out.println("Primo-"+ Math.min(m,n)+ " em grau " + Math.abs(m -n) );
 
-            }
-         }
+        }
+
+         
 
     }
 
